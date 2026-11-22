@@ -3,17 +3,16 @@ import HeaderLink from './HeaderLink.astro';
 ---
 <header class="site-header">
   <div class="nav-shell">
-    <a class="site-mark" href="/" aria-label="최지웅 홈">
+    <a class="site-mark" href="/" aria-label="최지웅 블로그 홈">
       <span class="mark-square">JC</span>
-      <span class="mark-name">JIWOONG CHOI<small>/ SECURITY NOTES</small></span>
+      <span class="mark-name">JIWOONG CHOI<small>/ TECH JOURNAL</small></span>
     </a>
     <nav class="nav-links" aria-label="주요 메뉴">
       <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/projects">Projects</HeaderLink>
-      <HeaderLink href="/research">Research</HeaderLink>
       <HeaderLink href="/blog">Blog</HeaderLink>
+      <HeaderLink href="/projects">Projects</HeaderLink>
       <HeaderLink href="/about">About</HeaderLink>
     </nav>
-    <a class="nav-github" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <a class="nav-github" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필 열기 (새 창)">GitHub ↗</a>
   </div>
 </header>

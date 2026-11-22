@@ -3,21 +3,34 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import PageLayout from './PageLayout.astro';
 type Props = CollectionEntry<'blog'>['data'];
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, tags, relatedRepo } = Astro.props;
 ---
 <PageLayout title={title + ' | Jiwoong Choi'} description={description}>
   <main>
-    <header class="page-header" style="max-width:760px;margin-left:auto;margin-right:auto">
-      <span class="eyebrow">Technical note</span>
-      <h1>{title}</h1><p class="page-lead">{description}</p>
-      <p style="font-size:13px;color:var(--muted);margin-top:12px">
-        {pubDate.toLocaleDateString('ko-KR')}
-        {updatedDate && ' · 수정 ' + updatedDate.toLocaleDateString('ko-KR')}
-      </p>
+    <header class="page-header article-header">
+      <span class="eyebrow">{category}</span>
+      <h1>{title}</h1>
+      <p class="page-lead">{description}</p>
+      <div class="article-meta">
+        <time datetime={pubDate.toISOString().slice(0,10)}>{pubDate.toLocaleDateString('ko-KR')}</time>
+        {updatedDate && <span>· 수정 {updatedDate.toLocaleDateString('ko-KR')}</span>}
+        {relatedRepo && <a href={relatedRepo} target="_blank" rel="noopener noreferrer">관련 GitHub 저장소 ↗</a>}
+      </div>
+      {tags.length > 0 && <div class="article-tags">{tags.map(tag => <span class="tag">#{tag}</span>)}</div>}
     </header>
     <article class="prose">
       {heroImage && <Image src={heroImage} width={1020} height={510} alt="" />}
       <slot />
     </article>
+    <nav class="article-back" aria-label="목록으로 돌아가기"><a href="/blog">← 모든 글로 돌아가기</a></nav>
   </main>
 </PageLayout>
+<style>
+  .article-header { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .article-header h1 { line-height: 1.28; }
+  .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 18px; color: #9cb1ad; font-size: 13px; }
+  .article-meta a, .article-back a { color: var(--accent); text-decoration: none; }
+  .article-meta a:hover, .article-back a:hover { text-decoration: underline; }
+  .article-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+  .article-back { max-width: 760px; margin: 55px auto 0; padding-top: 23px; border-top: 1px solid var(--border); font-size: 14px; }
+</style>

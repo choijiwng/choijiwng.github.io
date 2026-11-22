@@ -1,23 +1,116 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
-const posts = (await getCollection('blog', ({data}) => !data.draft))
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a,b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const topics = [
+  { label: 'Project Retrospective', description: '프로젝트를 선택한 이유, 실행 과정, 지금 다시 내리는 평가' },
+  { label: 'Infrastructure', description: 'Linux · 네트워크 · Docker · 인프라를 배우는 과정' },
+  { label: 'Security Research', description: '취약점 재현, 공격 표면, 검증과 한계' },
+  { label: 'Troubleshooting', description: '장애 분석과 실패한 가설, 해결 과정' },
+  { label: 'Thoughts', description: '공부 방향과 기술, 개발 방식에 대한 생각' },
+  { label: 'Learning Notes', description: '실습과 개념을 이해한 만큼 정리하는 기록' },
+];
 ---
-<PageLayout title="Blog | Jiwoong Choi" description="인프라, 보안 연구와 실험에서 배운 내용을 기록합니다.">
+<PageLayout title="Blog | Jiwoong Choi" description="GitHub 활동 뒤에 있던 고민, 실험, 실패와 배움을 기록한 기술 블로그.">
   <main>
     <header class="page-header">
-      <span class="eyebrow">Technical writing</span><h1>Blog</h1>
-      <p class="page-lead">문제 정의 → 가설 → 실험 → 결과 → 한계. 단순한 방법 소개보다 판단이 어떻게 바뀌었는지를 기록합니다.</p>
+      <span class="eyebrow">Writing · Experiences · Opinions</span>
+      <h1>Blog</h1>
+      <p class="page-lead">GitHub에는 코드와 결과를 남깁니다. 이곳에는 활동을 직접 돌아보며, 당시 이해한 것과 지금의 생각을 기록합니다. 정답을 주장하기보다 판단이 바뀌는 과정까지 남기려 합니다.</p>
     </header>
-    <div class="post-list">
-      {posts.map((post) => (
-        <a class="post-item" href={'/blog/' + post.id + '/'}>
-          <div><strong>{post.data.title}</strong><p>{post.data.description}</p></div>
-          <small>{post.data.pubDate.toLocaleDateString('ko-KR')}</small>
-        </a>
-      ))}
-    </div>
-    {posts.length === 0 && <div class="empty-state">현재 공개된 글이 없습니다. 새로운 기술 글을 발행하면 이곳에 자동으로 나타납니다.</div>}
+
+    <section id="posts" aria-labelledby="all-posts-heading">
+      <div class="section-head">
+        <div><span class="eyebrow">Published writing</span><h2 id="all-posts-heading">모든 글 <span class="entry-count">{posts.length}편</span></h2></div>
+        <a href="/rss.xml">RSS 구독 ↗</a>
+      </div>
+      <div class="filter-bar" aria-label="글 카테고리 필터">
+        <button class="filter-button selected" type="button" data-blog-filter="all" aria-pressed="true">전체 {posts.length}</button>
+        {topics.map(topic => {
+          const count = posts.filter(post => post.data.category === topic.label).length;
+          return count > 0 ? <button class="filter-button" type="button" data-blog-filter={topic.label} aria-pressed="false">{topic.label} {count}</button> : null;
+        })}
+      </div>
+      <div class="post-list">
+        {posts.map(post => (
+          <a class="post-item" href={'/blog/' + post.id + '/'} data-blog-category={post.data.category}>
+            <div class="post-copy">
+              <span class="post-label">{post.data.category}</span>
+              <strong>{post.data.title}</strong>
+              <p>{post.data.description}</p>
+              {post.data.tags.length > 0 && <span class="post-tags">{post.data.tags.map(tag => '#' + tag).join('   ')}</span>}
+            </div>
+            <small>{post.data.pubDate.toLocaleDateString('ko-KR')}</small>
+          </a>
+        ))}
+      </div>
+      {posts.length === 0 && <p class="empty-state">아직 공개한 글이 없습니다. 첫 번째 글을 발행하면 여기에 나타납니다.</p>}
+      <p id="filter-empty" class="empty-state" hidden>선택한 분류에 아직 공개된 글이 없습니다.</p>
+    </section>
+
+    <section id="topics" class="section" aria-labelledby="topic-heading">
+      <div class="section-head"><div><span class="eyebrow">Writing directions</span><h2 id="topic-heading">글을 분류하는 기준</h2></div></div>
+      <div class="topic-directory">
+        {topics.map(topic => (
+          <article class="topic-entry">
+            <div><strong>{topic.label}</strong><p>{topic.description}</p></div>
+            <small>{posts.filter(post => post.data.category === topic.label).length}편</small>
+          </article>
+        ))}
+      </div>
+      <p class="topic-note">이 분류는 앞으로 쌓일 글의 방향입니다. 내용에 따라 분류는 수정하거나 합칠 수 있습니다.</p>
+    </section>
+
+    <aside class="section writing-footnote">
+      <span class="eyebrow">Source of truth</span>
+      <h2>코드와 근거는 GitHub에</h2>
+      <p>글은 특정 시점의 이해와 판단을 담습니다. 실행 가능한 코드, 실험 결과의 원문, 팀 프로젝트의 기여 내역은 관련 GitHub 저장소에 연결합니다.</p>
+      <a class="text-link" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer">GitHub 프로필 ↗</a>
+    </aside>
   </main>
 </PageLayout>
+<script>
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-blog-filter]'));
+  const entries = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-blog-category]'));
+  const noMatches = document.getElementById('filter-empty');
+
+  for (const button of filters) {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.blogFilter || 'all';
+      for (const filter of filters) {
+        const active = filter === button;
+        filter.classList.toggle('selected', active);
+        filter.setAttribute('aria-pressed', String(active));
+      }
+      let visible = 0;
+      for (const entry of entries) {
+        const show = selected === 'all' || entry.dataset.blogCategory === selected;
+        entry.hidden = !show;
+        if (show) visible++;
+      }
+      if (noMatches) noMatches.hidden = visible > 0;
+    });
+  }
+</script>
+<style>
+  .entry-count { font-size: 16px; color: var(--muted); font-weight: 400; letter-spacing: 0; }
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .filter-button { appearance: none; cursor: pointer; font: inherit; font-size: 12px; padding: 7px 13px; border: 1px solid #39535c; border-radius: 999px; background: #14252c; color: #b4c9c6; }
+  .filter-button:hover, .filter-button.selected { background: #224538; border-color: #5b9c77; color: #c3ffcf; }
+  .filter-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .post-item[hidden], #filter-empty[hidden] { display: none; }
+  .post-copy { min-width: 0; }
+  .post-label { display: block; color: #9ce5a9; font-size: 11px; font-weight: 800; letter-spacing: .1em; margin-bottom: 8px; }
+  .post-tags { display: block; margin-top: 11px; white-space: pre-wrap; color: #809f9b; font-size: 12px; }
+  .topic-directory { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 11px; }
+  .topic-entry { background: #13232b; border: 1px solid var(--border); border-radius: 10px; padding: 19px; display: flex; justify-content: space-between; gap: 10px; }
+  .topic-entry strong { display: block; font-size: 15px; }
+  .topic-entry p { font-size: 13px; color: var(--muted); margin-top: 5px; }
+  .topic-entry small { white-space: nowrap; color: #95b9a0; }
+  .topic-note { color: #8fa7a5; font-size: 13px; margin-top: 13px; }
+  .writing-footnote { border: 1px solid #375a4f; padding: 25px; border-radius: 11px; background: #152b2c; }
+  .writing-footnote h2 { margin: 9px 0; font-size: 23px; }
+  .writing-footnote p { color: var(--muted); font-size: 14px; max-width: 780px; margin-bottom: 12px; }
+  @media (max-width: 620px) { .topic-directory { grid-template-columns: 1fr; } }
+</style>
