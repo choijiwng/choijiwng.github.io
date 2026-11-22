@@ -1,0 +1,70 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# 이 설정은 공개됩니다. 개인 토큰 또는 API 비밀키를 작성하지 마세요.
+backend:
+  name: github
+  repo: choijiwng/choijiwng.github.io
+  branch: main
+  auth_methods: [token]
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: blog
+    label: 블로그 글
+    label_singular: 글
+    description: GitHub의 코드와 활동을 돌아보며 경험, 배움과 생각을 기록합니다.
+    folder: src/content/blog
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    preview_path: "/blog/{{filename}}/"
+    fields:
+      - label: 제목
+        name: title
+        widget: string
+        hint: 글 제목입니다. 글 주소는 저장 전에 확인하세요.
+      - label: 요약
+        name: description
+        widget: text
+        hint: 글 목록과 검색엔진에 표시할 짧은 소개입니다.
+      - label: 작성 날짜
+        name: pubDate
+        widget: datetime
+        type: date
+      - label: 분류
+        name: category
+        widget: select
+        default: Thoughts
+        options:
+          - Project Retrospective
+          - Infrastructure
+          - Security Research
+          - Troubleshooting
+          - Thoughts
+          - Learning Notes
+      - label: 태그
+        name: tags
+        widget: list
+        required: false
+        default: []
+        field:
+          label: 태그
+          name: tag
+          widget: string
+      - label: 관련 GitHub 저장소
+        name: relatedRepo
+        widget: string
+        required: false
+        hint: 선택 사항입니다. 예) https://github.com/choijiwng/pwnable
+      - label: 비공개 초안
+        name: draft
+        widget: boolean
+        default: true
+        hint: 초안으로 저장하면 사이트와 RSS에 노출되지 않습니다. 단, 공개 GitHub 저장소의 파일은 읽을 수 있습니다.
+      - label: 본문
+        name: body
+        widget: richtext
+        hint: 서식 편집과 Markdown 원문 편집을 전환할 수 있습니다.
+        modes: [rich_text, raw]

@@ -12,7 +12,8 @@ const blog = defineCollection({
     heroImage: z.optional(image()),
     category: z.string().default('Thoughts'),
     tags: z.array(z.string()).default([]),
-    relatedRepo: z.string().url().optional(),
+    // CMS는 선택적 URL을 빈 문자열로 저장할 수 있으므로 둘 다 수용합니다.
+    relatedRepo: z.union([z.literal(''), z.string().url()]).optional(),
     draft: z.boolean().default(false),
   }),
 });
