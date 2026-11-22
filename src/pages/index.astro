@@ -1,74 +1,135 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
-const latestPosts = (await getCollection('blog', ({data}) => !data.draft))
-  .sort((a,b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0,3);
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latestPosts = posts.slice(0, 5);
+const subjects = [
+  { name: '프로젝트 회고', english: 'Project Retrospective', description: '무엇을 만들었는지보다 왜 그렇게 결정했는지, 다시 한다면 무엇을 바꿀지를 돌아봅니다.' },
+  { name: '인프라와 시스템', english: 'Infrastructure', description: 'Linux, 네트워크, 컨테이너와 서비스 구조를 이해하며 남긴 실습과 생각입니다.' },
+  { name: '보안 연구', english: 'Security Research', description: '취약점 재현, 공격 표면, 검증과 반례를 구분해 기록합니다.' },
+  { name: '시행착오와 생각', english: 'Thoughts', description: '공부 방향, 개발 방식, 실패 경험에서 달라진 판단을 이야기합니다.' },
+];
 ---
 <PageLayout>
   <main>
-    <section class="hero">
+    <section class="hero journal-hero" aria-labelledby="journal-heading">
       <div>
-        <span class="eyebrow">Offensive security · systems research</span>
-        <h1>경계를 이해하고,<br /><em>가정을 검증합니다.</em></h1>
-        <p>안녕하세요, 최지웅입니다. 정보보안공학을 공부하며 시스템이 신뢰하는 경계와 그 경계가 깨지는 조건을 탐구합니다. 문제 정의, 재현 가능한 증거, 그리고 검증의 한계를 함께 기록합니다.</p>
+        <span class="eyebrow">Technical blog · learning in public</span>
+        <h1 id="journal-heading">코드는 GitHub에,<br /><em>생각과 배움은 이곳에.</em></h1>
+        <p>안녕하세요, 최지웅입니다. GitHub에 남긴 보안 연구와 개발 활동을 바탕으로, 그때 무엇을 이해했고 왜 그런 선택을 했는지 제 언어로 정리합니다. 모르는 것은 모른다고 적고, 시간이 지나 생각이 바뀌면 그 과정도 남기려고 합니다.</p>
         <div class="action-row">
-          <a class="action primary" href="/projects">프로젝트 보기 ↗</a>
-          <a class="action secondary" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer">GitHub 코드 ↗</a>
+          <a class="action primary" href="/blog">글 읽어보기 ↗</a>
+          <a class="action secondary" href="/about">소개와 활동 이력 ↗</a>
         </div>
       </div>
-      <div class="terminal" aria-label="연구 접근 방식을 보여주는 예시 카드">
-        <div class="terminal-head">RESEARCH / APPROACH</div>
-        <div class="terminal-body">
-          <div class="muted"># principles, not experimental output</div>
-          <div><span class="accent">01</span> · define the boundary</div>
-          <div><span class="accent">02</span> · test the assumption</div>
-          <div><span class="accent">03</span> · preserve the evidence</div>
-          <div><span class="accent">04</span> · state the limitation</div>
-          <div style="margin-top:12px"><span class="accent">→</span> learning in public_</div>
+      <aside class="journal-note" aria-label="블로그 소개">
+        <span class="journal-note-label">EDITOR'S NOTE / 이곳에 남기는 것</span>
+        <div class="journal-note-rule"></div>
+        <h2>잘 만든 결과물만을<br />전시하지 않습니다.</h2>
+        <p>프로젝트의 시작과 끝 사이에 있었던 질문, 잘못된 가정, 기술적으로 배운 것, 지금 다시 보면 아쉬운 점까지 기록합니다.</p>
+        <div class="journal-note-footer"><span>GITHUB</span> 코드를 확인하는 곳 <span class="journal-note-sep">/</span> <span>BLOG</span> 판단을 읽는 곳</div>
+      </aside>
+    </section>
+
+    <section class="section latest-writing" aria-labelledby="latest-heading">
+      <div class="section-head">
+        <div><span class="eyebrow">Latest writing</span><h2 id="latest-heading">최근 기록</h2></div>
+        <a href="/blog">모든 글 보기 ↗</a>
+      </div>
+      {latestPosts.length ? (
+        <div class="post-list">
+          {latestPosts.map((post, i) => (
+            <a class:list={['post-item', { 'featured-post': i === 0 }]} href={'/blog/' + post.id + '/'}>
+              <div class="post-summary">
+                <span class="post-category">{post.data.category}</span>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.description}</p>
+              </div>
+              <small>{post.data.pubDate.toLocaleDateString('ko-KR')}</small>
+            </a>
+          ))}
         </div>
-      </div>
+      ) : (
+        <div class="empty-state">아직 공개된 글이 없습니다. 새 글을 발행하면 이곳에 최근 순서대로 표시됩니다.</div>
+      )}
     </section>
-    <section class="section">
-      <div class="section-head"><div><span class="eyebrow">Selected work</span><h2>주요 프로젝트</h2></div><a href="/projects">전체 보기 ↗</a></div>
-      <div class="card-grid">
-        <article class="work-card">
-          <div class="card-meta"><span class="tag">RESEARCH</span><span class="tag neutral">TEAM</span></div>
-          <h3>InodeFence</h3>
-          <p>TAR 압축 해제 후 파일 객체 관계와 외부 상태를 관찰하는 연구 프로토타입. 알려진 취약점의 통제 재현과 Security Contract 판정을 다룹니다.</p>
-          <a href="https://github.com/TheWaitForAGI/InodeFence" target="_blank" rel="noopener noreferrer">코드와 검증 범위 ↗</a>
-        </article>
-        <article class="work-card">
-          <div class="card-meta"><span class="tag">AI SECURITY</span><span class="tag neutral">TEAM</span></div>
-          <h3>CTF-OS</h3>
-          <p>사람이 선택한 CTF 문제를 격리된 환경에서 분석하는 Codex 기반 엔진. 자동 해결과 실제 대회 성능은 별개로 검증합니다.</p>
-          <a href="https://github.com/whatevertakes/CTF-OS" target="_blank" rel="noopener noreferrer">프로젝트 저장소 ↗</a>
-        </article>
-        <article class="work-card">
-          <div class="card-meta"><span class="tag">EXPLOITATION</span><span class="tag neutral">LEARNING</span></div>
-          <h3>Pwnable Notes</h3>
-          <p>BOF, ROP, Use-after-free, tcache poisoning을 포함한 바이너리 취약점 학습과 익스플로잇 풀이 기록입니다.</p>
-          <a href="https://github.com/choijiwng/pwnable" target="_blank" rel="noopener noreferrer">풀이 확인 ↗</a>
-        </article>
+
+    <section class="section" aria-labelledby="topic-heading">
+      <div class="section-head">
+        <div><span class="eyebrow">What I write about</span><h2 id="topic-heading">이런 이야기를 기록합니다</h2></div>
+        <a href="/blog#topics">주제 둘러보기 ↗</a>
       </div>
-    </section>
-    <section class="section">
-      <div class="section-head"><div><span class="eyebrow">How I work</span><h2>검증 과정도 결과입니다</h2></div></div>
-      <div class="method-grid">
-        <article><div class="number">01 / QUESTION</div><h3>문제를 정의하고</h3><p>신뢰 경계와 시스템의 가정을 구체적인 검증 질문으로 바꿉니다.</p></article>
-        <article><div class="number">02 / EVIDENCE</div><h3>근거를 남기고</h3><p>대조군, 실행 환경, 관찰 기록을 통해 재현 가능한 결과를 만듭니다.</p></article>
-        <article><div class="number">03 / LIMIT</div><h3>한계를 구분합니다</h3><p>알려진 CVE 재현과 신규 발견, 관찰 결과와 안전성 주장을 섞지 않습니다.</p></article>
-      </div>
-    </section>
-    <section class="section">
-      <div class="section-head"><div><span class="eyebrow">Field notes</span><h2>최근 기술 기록</h2></div><a href="/blog">모든 글 보기 ↗</a></div>
-      <div class="post-list">
-        {latestPosts.map((post) => (
-          <a class="post-item" href={'/blog/' + post.id + '/'}>
-            <div><strong>{post.data.title}</strong><p>{post.data.description}</p></div>
-            <small>{post.data.pubDate.toLocaleDateString('ko-KR')}</small>
-          </a>
+      <div class="topic-grid">
+        {subjects.map((subject, i) => (
+          <article class="topic-card">
+            <span class="topic-number">0{i + 1} / {subject.english}</span>
+            <h3>{subject.name}</h3>
+            <p>{subject.description}</p>
+          </article>
         ))}
       </div>
     </section>
+
+    <section class="section" aria-labelledby="project-heading">
+      <div class="section-head">
+        <div><span class="eyebrow">The code behind the writing</span><h2 id="project-heading">글의 출발점이 된 프로젝트</h2></div>
+        <a href="/projects">프로젝트 목록 ↗</a>
+      </div>
+      <div class="card-grid two">
+        <article class="work-card">
+          <div class="card-meta"><span class="tag">TEAM RESEARCH</span></div>
+          <h3>InodeFence</h3>
+          <p>아카이브 추출 후 객체 관계와 외부 파일 영향 여부를 관찰하는 연구 프로토타입. 알려진 CVE의 통제 재현 및 검증 범위를 문서화했습니다.</p>
+          <a href="https://github.com/TheWaitForAGI/InodeFence" target="_blank" rel="noopener noreferrer">GitHub 원문과 증거 ↗</a>
+        </article>
+        <article class="work-card">
+          <div class="card-meta"><span class="tag">TEAM ENGINEERING</span></div>
+          <h3>CTF-OS</h3>
+          <p>사람이 선택한 CTF 문제를 격리 환경에서 다루는 Codex 기반 엔진. 구현상의 검증과 실전 성능을 구별해 기록합니다.</p>
+          <a href="https://github.com/whatevertakes/CTF-OS" target="_blank" rel="noopener noreferrer">GitHub 프로젝트 ↗</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section profile-teaser">
+      <div>
+        <span class="eyebrow">About the author</span>
+        <h2>최지웅 / Jiwoong Choi</h2>
+        <p>상명대학교 정보보안공학과 학부생. Offensive Security와 시스템 보안, 취약점 연구에 관심이 있습니다. 활동 이력과 수상·교육 기록은 별도로 정리했습니다.</p>
+      </div>
+      <a class="action secondary" href="/about">이력 살펴보기 ↗</a>
+    </section>
   </main>
 </PageLayout>
+<style>
+  .journal-hero { padding-top: 35px; }
+  .journal-hero h1 { font-size: clamp(37px, 4.9vw, 62px); }
+  .journal-note { border: 1px solid #355248; border-radius: 13px; background: linear-gradient(160deg, #172e2c, #111e27 80%); padding: 34px; box-shadow: 0 20px 65px rgba(0,0,0,.17); }
+  .journal-note-label { color: #92cfad; font: 11px/1.5 ui-monospace, Menlo, monospace; letter-spacing: .09em; }
+  .journal-note-rule { height: 1px; background: #325348; margin: 20px 0 29px; }
+  .journal-note h2 { font-size: clamp(22px, 2.6vw, 30px); line-height: 1.45; margin-bottom: 18px; }
+  .journal-note p { font-size: 15px; color: var(--muted); line-height: 1.9; }
+  .journal-note-footer { margin-top: 31px; padding-top: 17px; border-top: 1px solid #29423f; color: #a6b9b8; font-size: 11px; }
+  .journal-note-footer span { color: #b4ecbd; font-weight: 800; }
+  .journal-note-footer .journal-note-sep { margin: 0 7px; color: #5b7971; }
+  .latest-writing { margin-top: 24px; }
+  .post-summary { min-width: 0; }
+  .post-category { display: inline-block; margin-bottom: 9px; color: #9bdda9; letter-spacing: .07em; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+  .post-item.featured-post { border-color: #426653; padding: 26px; background: linear-gradient(110deg, #1a302c, #142029); }
+  .post-item.featured-post strong { font-size: 21px; }
+  .topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 15px; }
+  .topic-card { border: 1px solid var(--border); border-radius: 11px; padding: 24px; background: var(--card); }
+  .topic-number { display: block; margin-bottom: 12px; color: #90c6a6; font: 11px ui-monospace, Menlo, monospace; }
+  .topic-card h3 { font-size: 19px; margin-bottom: 9px; }
+  .topic-card p { color: var(--muted); line-height: 1.85; font-size: 14px; }
+  .profile-teaser { border: 1px solid var(--border); background: #14232b; padding: 27px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .profile-teaser h2 { margin: 9px 0; font-size: 25px; }
+  .profile-teaser p { color: var(--muted); font-size: 14px; max-width: 660px; }
+  .profile-teaser a { flex-shrink: 0; }
+  @media(max-width:620px) {
+    .journal-note { padding: 24px; }
+    .topic-grid { grid-template-columns: 1fr; }
+    .profile-teaser { align-items: flex-start; flex-direction: column; }
+  }
+</style>

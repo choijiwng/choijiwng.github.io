@@ -1,52 +1,63 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 ---
-<PageLayout title="Projects | Jiwoong Choi" description="보안 연구, 도구 개발과 취약점 학습 프로젝트.">
+<PageLayout title="Projects | Jiwoong Choi" description="블로그 글의 원본이 되는 개발·보안 연구 프로젝트와 GitHub 코드.">
   <main>
     <header class="page-header">
-      <span class="eyebrow">Selected projects</span><h1>Projects</h1>
-      <p class="page-lead">결과물뿐 아니라 문제, 접근 방식, 실제 검증 범위를 함께 소개합니다. 팀 활동과 개인 기여를 구분합니다.</p>
+      <span class="eyebrow">Project archive · Source code</span>
+      <h1>Projects</h1>
+      <p class="page-lead">GitHub에 남긴 프로젝트를 찾아갈 수 있도록 정리한 목록입니다. 구현 방식과 검증 결과의 원문은 저장소에, 진행하며 내린 판단과 회고는 <a href="/blog">블로그</a>에 기록합니다.</p>
     </header>
+    <div class="detail-card project-note">
+      <strong>이 페이지를 읽는 방법</strong>
+      <p>여기의 설명은 프로젝트가 무엇을 다루는지 요약합니다. 팀 결과를 모두 개인 성과로 주장하지 않으며, 새 취약점 발견이나 실제 성능을 입증하지 않은 작업은 그렇게 표시하지 않습니다.</p>
+    </div>
     <section class="detail-card">
-      <div class="card-meta"><span class="tag">SECURITY RESEARCH</span><span class="tag neutral">TEAM · 2026</span></div>
+      <div class="card-meta"><span class="tag">SECURITY RESEARCH</span><span class="tag neutral">TEAM · 2026.10 – 현재</span></div>
       <h2>InodeFence</h2>
-      <p>TAR 추출 전후의 파일 객체 관계와 외부 파일 영향 여부를 관찰하고, Security Contract를 통해 경계 위반을 판정하는 연구 프로토타입입니다.</p>
-      <h3>기여와 검증</h3>
-      <ul>
-        <li>알려진 node-tar 취약점 CVE-2026-23745 및 CVE-2026-24842의 통제된 재현에 참여했습니다.</li>
-        <li>재현 스크립트, 증거 기록, Python tarfile 정책 비교 및 symlink 경로 판정 관련 코드를 팀 저장소에 기여했습니다.</li>
-        <li>신규 취약점 발견이나 통계적으로 입증된 탐색 성능 향상은 주장하지 않습니다.</li>
-      </ul>
-      <a class="text-link" href="https://github.com/TheWaitForAGI/InodeFence" target="_blank" rel="noopener noreferrer">저장소 · 증거 · 한계 ↗</a>
+      <p>TAR 추출 전후 파일 객체의 관계와 외부 파일 영향 여부를 관찰하고 보안 경계를 검사하는 연구 프로토타입입니다. 알려진 node-tar CVE-2026-23745, CVE-2026-24842를 통제된 환경에서 재현했습니다.</p>
+      <p>재현 스크립트, 증거 기록, Python tarfile 정책 비교, symlink 경로 판정 등을 팀 저장소에 기여했습니다. 신규 CVE 발견이나 퍼저 성능 향상은 주장하지 않습니다.</p>
+      <a class="text-link" href="https://github.com/TheWaitForAGI/InodeFence" target="_blank" rel="noopener noreferrer">원문 코드 · 증거 · 검증 한계 ↗</a>
     </section>
     <section class="detail-card">
-      <div class="card-meta"><span class="tag">AI TOOLING</span><span class="tag neutral">WHATEVERTAKES</span></div>
+      <div class="card-meta"><span class="tag">AI TOOLING</span><span class="tag neutral">WHATEVERTAKES · 2026.06 – 08</span></div>
       <h2>CTF-OS</h2>
-      <p>사람이 선정한 CTF 문제를 격리된 Docker 샌드박스에서 다루는 Codex 기반 엔진입니다. 문제 선택, 플래그 제출, 대회 결과 판정은 사람이 담당합니다.</p>
-      <p>팀장 및 메인 개발자로 참여했습니다. 구현 테스트와 실제 CTF 성능 입증은 구분합니다.</p>
-      <a class="text-link" href="https://github.com/whatevertakes/CTF-OS" target="_blank" rel="noopener noreferrer">코드와 문서 ↗</a>
+      <p>사람이 선택한 CTF 문제 하나를 격리된 Docker 샌드박스에서 다루는 Codex 기반 엔진입니다. WhateverTakes 팀에서 팀장과 메인 개발자로 참여했습니다. 실제 대회 성능은 별도 검증이 필요합니다.</p>
+      <a class="text-link" href="https://github.com/whatevertakes/CTF-OS" target="_blank" rel="noopener noreferrer">코드와 기술 문서 ↗</a>
     </section>
     <div class="card-grid two">
       <article class="work-card">
-        <div class="card-meta"><span class="tag">APP SECURITY</span></div><h3>BBS</h3>
-        <p>Node.js · Express · PostgreSQL 게시판에 bcrypt, CSRF 방어, rate limiting 등을 적용했습니다.</p>
-        <a href="https://github.com/choijiwng/BBS" target="_blank" rel="noopener noreferrer">저장소 ↗</a>
+        <div class="card-meta"><span class="tag">APP SECURITY</span><span class="tag neutral">2026.05 – 06</span></div>
+        <h3>BBS</h3>
+        <p>Node.js · Express · PostgreSQL 게시판. bcrypt, CSRF 보호, Helmet, rate limiting을 적용했습니다.</p>
+        <a href="https://github.com/choijiwng/BBS" target="_blank" rel="noopener noreferrer">GitHub 코드 ↗</a>
       </article>
       <article class="work-card">
-        <div class="card-meta"><span class="tag">DATA ANALYSIS</span></div><h3>CIC IDS 2017</h3>
-        <p>정상·공격 트래픽 분포와 포트별 패턴을 Python으로 분석하고 시각화했습니다.</p>
-        <a href="https://github.com/choijiwng/cic-ids2017-visualization" target="_blank" rel="noopener noreferrer">분석 자료 ↗</a>
+        <div class="card-meta"><span class="tag">DATA ANALYSIS</span><span class="tag neutral">2026.04 – 05</span></div>
+        <h3>CIC IDS 2017 Analysis</h3>
+        <p>정상·공격 트래픽의 분포와 포트별 특징을 Python으로 분석하고 시각화했습니다.</p>
+        <a href="https://github.com/choijiwng/cic-ids2017-visualization" target="_blank" rel="noopener noreferrer">분석 원문 ↗</a>
       </article>
       <article class="work-card">
-        <div class="card-meta"><span class="tag">SYSTEM SECURITY</span></div><h3>Pwnable</h3>
-        <p>BOF, ROP, 힙 메모리 취약점 분석과 익스플로잇 실습 기록입니다.</p>
-        <a href="https://github.com/choijiwng/pwnable" target="_blank" rel="noopener noreferrer">학습 기록 ↗</a>
+        <div class="card-meta"><span class="tag">SYSTEM SECURITY</span><span class="tag neutral">2025.12 – 2026.02</span></div>
+        <h3>Pwnable</h3>
+        <p>BOF, ROP, use-after-free, tcache poisoning 등 바이너리 취약점 실습 기록입니다.</p>
+        <a href="https://github.com/choijiwng/pwnable" target="_blank" rel="noopener noreferrer">풀이 기록 ↗</a>
       </article>
       <article class="work-card">
-        <div class="card-meta"><span class="tag">WEB SECURITY</span></div><h3>Web Vulnerability</h3>
-        <p>서버 측 취약점, 인증, API, 접근 제어 등을 분류한 개인 학습 저장소입니다.</p>
-        <a href="https://github.com/choijiwng/Web_Vulnerability" target="_blank" rel="noopener noreferrer">학습 기록 ↗</a>
+        <div class="card-meta"><span class="tag">WEB SECURITY</span><span class="tag neutral">STUDY NOTES</span></div>
+        <h3>Web Vulnerability</h3>
+        <p>서버 취약점, 인증·접근 제어, API 등 웹 보안 학습 자료를 주제별로 정리했습니다.</p>
+        <a href="https://github.com/choijiwng/Web_Vulnerability" target="_blank" rel="noopener noreferrer">학습 저장소 ↗</a>
       </article>
     </div>
+    <p class="bottom-link">프로젝트별 활동 이력과 수상·교육 기록은 <a href="/about">About 페이지</a>에서 확인할 수 있습니다.</p>
   </main>
 </PageLayout>
+<style>
+  .page-lead a, .bottom-link a { color: var(--accent); }
+  .project-note { background: #152b2a; border-color: #315948; }
+  .project-note strong { color: #c8e9d2; }
+  .project-note p { margin-top: 6px; }
+  .bottom-link { color: var(--muted); font-size: 14px; margin-top: 23px; }
+</style>

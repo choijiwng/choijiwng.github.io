@@ -1,35 +1,128 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
+const experiences = [
+  { period: '2026.10 – 현재', title: 'InodeFence', kind: '연구 · 팀 프로젝트', desc: 'TAR 추출 과정의 파일시스템 객체 경계를 검증하는 연구 프로토타입. 알려진 node-tar 하드링크 취약점을 통제 환경에서 재현하고, 재현 스크립트·raw 증거 기록·Python tarfile 정책 비교 및 symlink 경로 판정 코드에 기여했습니다. AI 도구를 활용해 구현했으며 실험 성능이나 신규 CVE 발견을 주장하지 않습니다.', url: 'https://github.com/TheWaitForAGI/InodeFence', cta: '연구 자료' },
+  { period: '2026.06 – 2026.08', title: 'CTF-OS', kind: '팀장 · 메인 개발자 / WhateverTakes', desc: '사람이 고른 CTF 문제 하나를 격리된 Docker 환경에서 다루는 Codex 기반 엔진. 문제 선택과 플래그 제출은 사람이 담당하며, 구현 검증과 실전 성능 입증은 분리합니다.', url: 'https://github.com/whatevertakes/CTF-OS', cta: '프로젝트' },
+  { period: '2026.05 – 2026.06', title: 'BBS', kind: '개발 프로젝트', desc: 'Node.js, Express, PostgreSQL 기반 게시판을 개발하고 bcrypt, CSRF 보호, Helmet, rate limiting 등의 보안 기능을 적용했습니다.', url: 'https://github.com/choijiwng/BBS', cta: '코드' },
+  { period: '2026.04 – 2026.05', title: 'CIC IDS 2017 Analysis', kind: '데이터 분석', desc: 'CIC IDS 2017 데이터셋의 정상·공격 트래픽 분포와 포트 기반 패턴을 분석하고 Python으로 시각화했습니다.', url: 'https://github.com/choijiwng/cic-ids2017-visualization', cta: '분석 자료' },
+  { period: '2025.12 – 2026.02', title: 'Pwnable Notes', kind: '시스템 보안 학습', desc: 'BOF, return-to-shellcode, return-to-libc, ROP, use-after-free, tcache poisoning을 학습하며 실습 및 풀이를 기록했습니다.', url: 'https://github.com/choijiwng/pwnable', cta: '학습 기록' },
+];
+const recognitions = [
+  { period: '2026.08', title: '2026 KISIA 정보보호 경진대회 · 본선 진출', detail: 'WhateverTakes 팀', url: 'https://github.com/choijiwng/choijiwng/blob/main/certificates/2026-kisia-finals-participation.pdf' },
+  { period: '2025.09', title: '2025 충남 IT Hackathon (초급 부문) · 우수상', detail: 'SS통합 팀', url: 'https://github.com/choijiwng/choijiwng/blob/main/certificates/2025-chungnam-it-hackathon-excellence-award.pdf' },
+];
+const courses = [
+  { period: '2025.09', title: '웹 취약점 기반 침투테스트 2025 · 수료', detail: '상명대학교 천안산학협력단', url: 'https://github.com/choijiwng/choijiwng/blob/main/certificates/2025-web-pentest-completion.pdf' },
+  { period: '2025.09', title: '정보보안 입문 (웹·리버싱·포렌식·포너블) 2025 · 수료', detail: '상명대학교 천안산학협력단', url: 'https://github.com/choijiwng/choijiwng/blob/main/certificates/2025-infosec-intro-completion.pdf' },
+];
 ---
-<PageLayout title="About | Jiwoong Choi" description="최지웅의 보안 엔지니어 소개와 관심 분야.">
+<PageLayout title="About & Activities | Jiwoong Choi" description="최지웅의 학력, 관심 분야, 연구와 개발 활동, 대회 수상 및 보안 교육 이력.">
   <main>
     <header class="page-header">
-      <span class="eyebrow">About me</span><h1>최지웅 / Jiwoong Choi</h1>
-      <p class="page-lead">상명대학교 정보보안공학과에서 공부하며 2027년 Offensive Security 분야 취업을 준비하고 있습니다. 문제를 정의하고 검증 가능한 근거로 설명하는 보안 엔지니어를 지향합니다.</p>
+      <span class="eyebrow">About · Background · Activity log</span>
+      <h1>최지웅 <span class="english-name">/ Jiwoong Choi</span></h1>
+      <p class="page-lead">상명대학교 정보보안공학과 학부생입니다. 2027년 Offensive Security 분야 취업을 목표로 시스템 보안, 취약점 연구와 인프라를 공부하고 있습니다. 이 페이지는 <a href="https://github.com/choijiwng/choijiwng" target="_blank" rel="noopener noreferrer">GitHub 프로필 README</a>의 이력을 바탕으로 구성했습니다.</p>
     </header>
-    <section class="detail-card">
-      <span class="eyebrow">Interests</span><h2>관심 분야</h2>
-      <div class="card-meta" style="margin-top:18px">
-        <span class="tag">Vulnerability Research</span><span class="tag">System Security</span><span class="tag">Red Team</span>
-        <span class="tag">Binary Exploitation</span><span class="tag">Infrastructure</span><span class="tag">AI Security</span>
+    <section class="about-summary" aria-label="기본 정보">
+      <div><span class="detail-label">EDUCATION</span><strong>상명대학교</strong><p>정보보안공학과 · 2022.03 – 현재</p></div>
+      <div><span class="detail-label">AFFILIATION</span><strong>WhateverTakes</strong><p>CTF 팀 · 공동 프로젝트 활동</p></div>
+      <div><span class="detail-label">FOCUS</span><strong>Offensive Security</strong><p>취약점 연구 · 시스템 보안 · 레드팀</p></div>
+    </section>
+    <section class="section" aria-labelledby="interest-title">
+      <div class="section-head"><div><span class="eyebrow">Interests</span><h2 id="interest-title">관심 분야</h2></div></div>
+      <div class="card-meta interest-tags">
+        <span class="tag">Vulnerability Research</span><span class="tag">System Security</span>
+        <span class="tag">Penetration Testing</span><span class="tag">Red Team</span>
+        <span class="tag">Binary Exploitation</span><span class="tag">Infrastructure</span>
+        <span class="tag">AI Security Tooling</span>
       </div>
-      <p>시스템 동작 원리부터 공격 표면 분석까지 연결하고, 팀 프로젝트에서 기여와 검증 범위를 명확히 기록하려고 합니다.</p>
+      <p class="interest-note">기술적으로 무엇을 구현했는지만이 아니라, 문제를 선택한 이유와 실험에서 어떤 가정을 수정했는지 <a href="/blog">블로그</a>에 기록하려 합니다.</p>
     </section>
-    <section class="detail-card">
-      <span class="eyebrow">Affiliation</span><h2>활동</h2>
-      <ul>
-        <li>상명대학교 정보보안공학과 · 학부 과정</li>
-        <li>WhateverTakes · CTF-OS 공동 프로젝트</li>
-        <li>InodeFence · TAR 추출 경계 연구 프로젝트</li>
-        <li>2026 KISIA 정보보호 경진대회 본선 진출 (팀)</li>
-        <li>2025 충남 IT Hackathon 초급 부문 우수상 (팀)</li>
-      </ul>
-      <a class="text-link" href="https://github.com/choijiwng/choijiwng" target="_blank" rel="noopener noreferrer">GitHub 프로필 및 증빙 ↗</a>
+    <section class="section" aria-labelledby="experience-title">
+      <div class="section-head"><div><span class="eyebrow">Projects & experience</span><h2 id="experience-title">연구 · 프로젝트 활동 이력</h2></div><a href="/projects">프로젝트 목록 ↗</a></div>
+      <ol class="history-list">
+        {experiences.map(item => (
+          <li class="history-entry">
+            <time>{item.period}</time>
+            <div>
+              <span class="history-kind">{item.kind}</span>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+              <a class="text-link" href={item.url} target="_blank" rel="noopener noreferrer">{item.cta} ↗</a>
+            </div>
+          </li>
+        ))}
+      </ol>
     </section>
-    <section class="detail-card">
-      <span class="eyebrow">Contact</span><h2>연락</h2>
-      <p>연구 교류와 협업 문의를 환영합니다.</p>
-      <a class="text-link" href="mailto:jiwoong729@gmail.com">jiwoong729@gmail.com ↗</a>
+    <section class="section" aria-labelledby="recognition-title">
+      <div class="section-head"><div><span class="eyebrow">Awards & honors</span><h2 id="recognition-title">대회 · 수상</h2></div></div>
+      <div class="credential-list">
+        {recognitions.map(item => (
+          <article class="credential-entry">
+            <span class="credential-date">{item.period}</span>
+            <div><strong>{item.title}</strong><p>{item.detail}</p></div>
+            <a class="text-link" href={item.url} target="_blank" rel="noopener noreferrer">증빙 ↗</a>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section" aria-labelledby="education-title">
+      <div class="section-head"><div><span class="eyebrow">Training</span><h2 id="education-title">보안 교육 · 수료</h2></div></div>
+      <div class="credential-list">
+        {courses.map(item => (
+          <article class="credential-entry">
+            <span class="credential-date">{item.period}</span>
+            <div><strong>{item.title}</strong><p>{item.detail}</p></div>
+            <a class="text-link" href={item.url} target="_blank" rel="noopener noreferrer">증빙 ↗</a>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="section contact-note">
+      <div>
+        <span class="eyebrow">Contact</span>
+        <h2>연락</h2>
+        <p>기술 기록과 코드가 궁금하다면 블로그와 GitHub를 확인해 주세요. 연구·프로젝트 교류도 환영합니다.</p>
+      </div>
+      <div class="contact-links">
+        <a class="text-link" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="text-link" href="mailto:jiwoong729@gmail.com">jiwoong729@gmail.com ↗</a>
+      </div>
     </section>
   </main>
 </PageLayout>
+<style>
+  .english-name { color: var(--muted); font-size: .62em; font-weight: 400; white-space: nowrap; }
+  .page-lead a { color: var(--accent); }
+  .about-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+  .about-summary > div { border: 1px solid var(--border); border-radius: 10px; padding: 21px; background: var(--card); }
+  .detail-label { display: block; color: #a0d7b3; font: 11px ui-monospace,Menlo,monospace; letter-spacing: .08em; margin-bottom: 15px; }
+  .about-summary strong { display: block; font-size: 19px; line-height: 1.4; }
+  .about-summary p { color: var(--muted); font-size: 13px; margin-top: 5px; }
+  .interest-tags { margin: 0 0 13px; gap: 9px; }
+  .interest-note { font-size: 14px; color: var(--muted); }
+  .interest-note a { color: var(--accent); }
+  .history-list { list-style: none; margin: 0; padding: 0; border-left: 1px solid #35524d; }
+  .history-entry { position: relative; display: grid; grid-template-columns: 170px minmax(0,1fr); gap: 24px; padding: 2px 0 35px 26px; }
+  .history-entry::before { content:""; position:absolute; width:9px; height:9px; background: var(--accent); border: 3px solid var(--bg); border-radius: 50%; left: -7px; top: 3px; }
+  .history-entry time, .credential-date { color: #98c6a6; font: 12px/1.8 ui-monospace,Menlo,monospace; }
+  .history-kind { color: #89a6a5; font-size: 12px; }
+  .history-entry h3 { font-size: 22px; margin: 6px 0 9px; }
+  .history-entry p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  .history-entry .text-link { display: inline-block; margin-top: 11px; }
+  .credential-list { display: grid; gap: 11px; }
+  .credential-entry { border: 1px solid var(--border); border-radius: 9px; background: var(--card); padding: 19px 22px; display: grid; grid-template-columns: 85px minmax(0,1fr) auto; gap: 17px; align-items: center; }
+  .credential-entry strong { display: block; font-size: 15px; }
+  .credential-entry p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .contact-note { padding: 25px; border: 1px solid #35564c; border-radius: 11px; background: #152b2a; display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+  .contact-note h2 { font-size: 26px; margin: 9px 0; }
+  .contact-note p { color: var(--muted); font-size: 14px; }
+  .contact-links { display: flex; flex-direction: column; gap: 13px; flex-shrink: 0; }
+  @media (max-width: 720px) {
+    .about-summary { grid-template-columns: 1fr; }
+    .history-entry { grid-template-columns: 1fr; gap: 5px; padding-bottom: 30px; }
+    .credential-entry { grid-template-columns: 1fr auto; }
+    .credential-date { grid-column: 1 / -1; }
+    .contact-note { flex-direction: column; align-items: flex-start; }
+  }
+</style>
