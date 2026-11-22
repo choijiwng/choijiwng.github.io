@@ -1,61 +1,60 @@
-# 블로그 작성 가이드
+# 블로그 작성 및 발행 가이드
 
-이 사이트는 **기술 블로그가 중심**입니다. GitHub 저장소에는 코드와 테스트 증거를 두고, 블로그에는 경험의 맥락, 생각, 평가 및 배운 점을 적습니다. 글을 억지로 취업 성과나 연구 성과처럼 포장하지 않습니다.
+이 블로그는 GitHub의 코드·실험을 바탕으로 활동의 맥락, 고민, 생각의 변화를 이야기하는 곳입니다.
 
-## 새 글 발행
+## 1. 사이트 안에서 작성하기
 
-1. src/content/blog/ 폴더에 영어 파일명으로 Markdown(.md) 파일을 추가합니다.
-2. 아래 frontmatter를 작성합니다.
-3. 글을 먼저 draft: true로 작성합니다.
-4. npm run build 및 npm run dev로 확인합니다.
-5. 공개해도 되는지 검토한 후 draft: false로 바꾸고 main에 반영합니다.
+1. https://choijiwng.github.io/admin/ 에 접속하거나 상단의 **✎ 글쓰기**를 클릭합니다.
+2. **Sign In with Token**으로 로그인합니다. 현재는 외부 OAuth 서버 없이 GitHub PAT로 로그인합니다.
+3. 블로그 글 → 새 글을 선택하고 제목, 요약, 날짜, 분류, 태그, 본문을 작성합니다.
+4. 처음에는 비공개 초안(draft: true)으로 저장한 후, 내용을 검토하고 초안을 해제해 발행합니다.
+5. 저장하면 GitHub의 src/content/blog/*.md에 커밋되고 main에 반영됩니다. GitHub Actions가 자동으로 빌드·배포합니다.
 
-예시:
+### GitHub 토큰 발급
 
-    ---
-    title: "한 프로젝트를 끝내고 다시 생각한 것"
-    description: "구현 과정과 달라진 판단에 대한 회고"
-    pubDate: "2026-11-22"
-    category: "Project Retrospective"
-    tags: ["회고", "시스템보안"]
-    relatedRepo: "https://github.com/choijiwng/pwnable"
-    draft: true
-    ---
+GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens**에서 발급합니다.
 
-- title / description / pubDate는 필수입니다.
-- category의 기본값은 Thoughts입니다. 사용 가능한 권장 분류:
-  - Project Retrospective: 프로젝트 회고
-  - Infrastructure: 인프라와 시스템
-  - Security Research: 보안 연구
-  - Troubleshooting: 장애와 문제 해결
-  - Thoughts: 생각과 평가
-  - Learning Notes: 학습 노트
-- tags, relatedRepo는 선택입니다.
-- draft: true는 **웹사이트의 목록·개별 글·RSS에서 제외**합니다. 단, GitHub 저장소 자체가 Public이므로 초안 파일을 원격 저장소에 올리면 GitHub에서 읽을 수 있습니다. 비공개 내용이나 토큰은 커밋하지 않습니다.
+- Resource owner: **choijiwng**
+- Repository access: **Only select repositories → choijiwng.github.io**
+- Repository permissions: **Contents = Read and write** (Metadata = Read는 자동 포함)
+- Expiration: 가능한 한 짧게 설정하고 필요할 때 새로 발급합니다.
 
-## 글 유형별 작성 구조
+토큰은 절대 소스코드, 블로그 원문 또는 대화에 붙이지 마세요. 내 사이트 관리자 로그인 창에서만 입력하고 공유 PC에서는 사용하지 마세요.
+Sveltia CMS는 로그인용 토큰을 해당 브라우저의 **localStorage**에 저장합니다. 공유 PC에서는 로그아웃하고 사이트 데이터를 삭제하며, 유출이 의심되면 GitHub에서 즉시 토큰을 폐기하세요.
 
-### 회고 · 의견
-- 당시 무엇을 하려고 했는가?
-- 어떤 선택을 했고 왜 그랬는가?
-- 예상과 달랐던 것은 무엇인가?
-- 지금은 그 선택을 어떻게 평가하나?
-- 다시 한다면 무엇을 바꿀 것인가?
+관리 페이지는 공개적으로 열릴 수 있지만 GitHub 저장소의 쓰기 권한 없이는 게시할 수 없습니다.
+관리 페이지의 noindex 설정은 검색엔진 노출 방지일 뿐 접근 제어가 아닙니다.
 
-### 실습 · 기술 분석
-- 문제와 환경
-- 직접 확인한 절차와 증거
-- 결과와 해석
-- 반례, 한계, 이후 할 일
+### 공개 범위 주의
 
-사실·추론·의견을 혼동하지 않습니다. 팀 기여와 개인 기여를 구분합니다. AI가 만든 코드나 설명은 확인한 범위만 주장합니다.
+초안(draft: true)은 웹사이트의 글 목록과 개별 글, RSS에 노출되지 않습니다. 그러나 GitHub 저장소 자체가 Public이라 파일 원문은 공개됩니다. 실제 비밀 정보, 토큰, 개인정보는 올리지 마세요.
 
-## 검증 및 배포
+본문 이미지 업로드는 public/uploads 아래 저장되고 글에는 /uploads/파일명 경로로 삽입됩니다.
+기존 heroImage 필드는 Astro 이미지 빌드용입니다. 관리자에서는 본문에 이미지를 첨부하세요.
 
-    npm ci
-    npm run build
-    npm run dev
+## 2. 글 분류
 
-작업 브랜치에서 글을 수정하고 Pull Request로 검토한 다음 main에 병합하면 GitHub Actions가 GitHub Pages에 자동 배포합니다.
+- Project Retrospective: 프로젝트 회고
+- Infrastructure: 인프라와 시스템
+- Security Research: 보안 연구
+- Troubleshooting: 장애 분석 및 문제 해결
+- Thoughts: 생각과 평가
+- Learning Notes: 학습 노트
 
-About의 학력·프로젝트·수상·교육 이력은 GitHub 프로필 README.md의 공개 기록을 기준으로 작성했습니다. 변경될 때 양쪽을 함께 업데이트해 주세요.
+## 3. 무엇을 기록할까?
+
+회고·생각: 시작한 이유, 선택의 근거, 예상과 다른 결과, 지금의 평가와 다음 시도.
+실습·분석: 환경, 재현 절차, 근거, 결과와 해석, 반례와 한계.
+
+팀의 성과와 개인 기여, 알려진 CVE 재현과 신규 발견을 구별해 표현합니다.
+
+## 4. VS Code 편집도 계속 가능
+
+원문은 src/content/blog/의 Markdown에 남아 있습니다.
+로컬에서는 npm ci && npm run build && npm run dev로 확인할 수 있습니다.
+
+관리 화면의 저장은 기본적으로 **main에 직접 커밋**하므로, 공개 여부와 내용을 다시 확인하세요.
+초안으로 저장해도 공개 GitHub 저장소에서는 파일을 읽을 수 있다는 점에 유의하세요.
+같은 글을 서로 다른 환경에서 동시에 편집하면 충돌할 수 있습니다.
+
+향후 로그인 편의성을 높이려면 GitHub OAuth 애플리케이션과 별도 OAuth 클라이언트(예: Cloudflare Worker)를 연결할 수 있습니다.
