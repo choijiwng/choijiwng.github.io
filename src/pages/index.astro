@@ -1,59 +1,74 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+const latestPosts = (await getCollection('blog', ({data}) => !data.draft))
+  .sort((a,b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0,3);
 ---
-
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to
-				build a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like
-				Tailwind, React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>
-					Edit this page in <code>src/pages/index.astro</code>
-				</li>
-				<li>
-					Edit the site header items in <code>src/components/Header.astro</code>
-				</li>
-				<li>
-					Add your name to the footer in <code>src/components/Footer.astro</code>
-				</li>
-				<li>
-					Check out the included blog posts in <code>src/content/blog/</code>
-				</li>
-				<li>
-					Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code>
-				</li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a> or{' '}
-				<a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a> by{' '}
-				<a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<PageLayout>
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Offensive security · systems research</span>
+        <h1>경계를 이해하고,<br /><em>가정을 검증합니다.</em></h1>
+        <p>안녕하세요, 최지웅입니다. 정보보안공학을 공부하며 시스템이 신뢰하는 경계와 그 경계가 깨지는 조건을 탐구합니다. 문제 정의, 재현 가능한 증거, 그리고 검증의 한계를 함께 기록합니다.</p>
+        <div class="action-row">
+          <a class="action primary" href="/projects">프로젝트 보기 ↗</a>
+          <a class="action secondary" href="https://github.com/choijiwng" target="_blank" rel="noopener noreferrer">GitHub 코드 ↗</a>
+        </div>
+      </div>
+      <div class="terminal" aria-label="연구 접근 방식을 보여주는 예시 카드">
+        <div class="terminal-head">RESEARCH / APPROACH</div>
+        <div class="terminal-body">
+          <div class="muted"># principles, not experimental output</div>
+          <div><span class="accent">01</span> · define the boundary</div>
+          <div><span class="accent">02</span> · test the assumption</div>
+          <div><span class="accent">03</span> · preserve the evidence</div>
+          <div><span class="accent">04</span> · state the limitation</div>
+          <div style="margin-top:12px"><span class="accent">→</span> learning in public_</div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">Selected work</span><h2>주요 프로젝트</h2></div><a href="/projects">전체 보기 ↗</a></div>
+      <div class="card-grid">
+        <article class="work-card">
+          <div class="card-meta"><span class="tag">RESEARCH</span><span class="tag neutral">TEAM</span></div>
+          <h3>InodeFence</h3>
+          <p>TAR 압축 해제 후 파일 객체 관계와 외부 상태를 관찰하는 연구 프로토타입. 알려진 취약점의 통제 재현과 Security Contract 판정을 다룹니다.</p>
+          <a href="https://github.com/TheWaitForAGI/InodeFence" target="_blank" rel="noopener noreferrer">코드와 검증 범위 ↗</a>
+        </article>
+        <article class="work-card">
+          <div class="card-meta"><span class="tag">AI SECURITY</span><span class="tag neutral">TEAM</span></div>
+          <h3>CTF-OS</h3>
+          <p>사람이 선택한 CTF 문제를 격리된 환경에서 분석하는 Codex 기반 엔진. 자동 해결과 실제 대회 성능은 별개로 검증합니다.</p>
+          <a href="https://github.com/whatevertakes/CTF-OS" target="_blank" rel="noopener noreferrer">프로젝트 저장소 ↗</a>
+        </article>
+        <article class="work-card">
+          <div class="card-meta"><span class="tag">EXPLOITATION</span><span class="tag neutral">LEARNING</span></div>
+          <h3>Pwnable Notes</h3>
+          <p>BOF, ROP, Use-after-free, tcache poisoning을 포함한 바이너리 취약점 학습과 익스플로잇 풀이 기록입니다.</p>
+          <a href="https://github.com/choijiwng/pwnable" target="_blank" rel="noopener noreferrer">풀이 확인 ↗</a>
+        </article>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">How I work</span><h2>검증 과정도 결과입니다</h2></div></div>
+      <div class="method-grid">
+        <article><div class="number">01 / QUESTION</div><h3>문제를 정의하고</h3><p>신뢰 경계와 시스템의 가정을 구체적인 검증 질문으로 바꿉니다.</p></article>
+        <article><div class="number">02 / EVIDENCE</div><h3>근거를 남기고</h3><p>대조군, 실행 환경, 관찰 기록을 통해 재현 가능한 결과를 만듭니다.</p></article>
+        <article><div class="number">03 / LIMIT</div><h3>한계를 구분합니다</h3><p>알려진 CVE 재현과 신규 발견, 관찰 결과와 안전성 주장을 섞지 않습니다.</p></article>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">Field notes</span><h2>최근 기술 기록</h2></div><a href="/blog">모든 글 보기 ↗</a></div>
+      <div class="post-list">
+        {latestPosts.map((post) => (
+          <a class="post-item" href={'/blog/' + post.id + '/'}>
+            <div><strong>{post.data.title}</strong><p>{post.data.description}</p></div>
+            <small>{post.data.pubDate.toLocaleDateString('ko-KR')}</small>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</PageLayout>
